@@ -6,10 +6,19 @@
 
 .left {
   width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .right {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.right img {
+  width: max-content;
+  height: 100%;
 }
