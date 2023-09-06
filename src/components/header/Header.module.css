@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 72px;
+  padding: 0 15px;
+  border-bottom: 2px solid var(--border);
+  width: 100%;
+}
+
+.imgContainer {
+  height: max-content;
+}
+
+img {
+  aspect-ratio: auto;
+  object-fit: contain;
+  max-height: 30px;
+}
+
+@media (min-width: 480px) {
+  .header {
+    height: 96px;
+    justify-content: flex-start;
+  }
+  .imgContainer {
+    display: flex;
+  }
+}
