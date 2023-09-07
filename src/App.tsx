@@ -5,13 +5,11 @@ import RegisterForm from "./components/register/RegisterForm";
 function App() {
   return (
     <div className="app-container">
-      <aside className="left">
+      <aside className="register">
         <Header />
         <RegisterForm />
       </aside>
-      <aside className="right">
-        <img src="/inicia-sesión-agente.png" alt="Inicia sesión agente" />
-      </aside>
+      <aside className="picture"></aside>
     </div>
   );
 }

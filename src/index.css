@@ -20,9 +20,13 @@ body {
 
 :root {
   --border: #f5f5f5;
-  --primary-color: #53389e;
-  --secondary-color: #ede9fe;
-  --disabled-color: #7065f0;
+  --input-border: #e0def7;
+  --input-background: #f7f7fd;
+  --eye-color: #9ea3ae;
+  --mobile-color: #53389e;
+  --disabled-color: #ede9fe;
+  --primary-color: #7065f0;
   --error-color: #c51b1b;
   --text: #000929;
+  --form-text: #6c727f;
 }

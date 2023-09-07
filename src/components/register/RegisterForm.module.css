@@ -1,8 +1,179 @@
-.formContainer .form {
+.registerContainer {
   display: flex;
+  flex: 1;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
+  max-width: 352px;
+  gap: 39px;
+  margin-right: 0;
+}
+.form {
+  color: var(--form-text);
+  width: 100%;
+  height: 75%;
+  max-height: 586px;
+}
+.form label {
+  display: none;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.titleContainer {
+  text-align: center;
+}
+
+.titleContainer h1 {
+  font-size: 32px;
+}
+.subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.5;
+}
+
+.inputFile {
+  height: 48px;
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.inputFile label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+}
+
+.inputFile img {
+  height: 48px;
+  max-height: max-content;
+}
+
+.inputFile span {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.inputInvalid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.input {
+  height: 48px;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-background);
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.passwordContainer {
+  width: 100%;
+  padding-bottom: 24px;
+}
+.passwordContainer small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputPassword {
+  display: flex;
+  width: 100%;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.eyeContainer {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: inherit;
+  border: none;
+  color: var(--eye-color);
+  font-size: 24px;
+}
+
+.forgotPassword {
+  color: var(--primary-color);
+}
+
+.validation {
+  padding: 10px 0;
+  display: none;
+}
+
+.passwordContainer .validationPassword {
+  display: none;
+}
+
+.btnContainer {
+  width: 100%;
+  height: 88px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btnContainer strong {
+  color: black;
+  font-weight: bold;
+}
+
+@media (min-width: 780px) {
+  .registerContainer {
+    margin-right: 99px;
+  }
+}
+
+@media (min-width: 480px) {
+  .registerContainer {
+    align-items: flex-start;
+    gap: 32px;
+  }
+  .titleContainer {
+    text-align: left;
+  }
+  .btnContainer {
+    height: 96px;
+  }
+
+  .passwordContainer .validationPassword {
+    padding-bottom: 10px;
+    display: flex;
+  }
+  .passwordContainer .forgotPassword {
+    display: none;
+  }
 }
