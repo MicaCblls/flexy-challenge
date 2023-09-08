@@ -302,7 +302,7 @@ const RegisterForm = () => {
               </span>
             </div>
             {formErrorStatus?.password?.length > 0 && (
-              <small className={style.validationPassword}>
+              <small className={style.validation}>
                 {formErrorStatus.password}
               </small>
             )}

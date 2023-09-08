@@ -196,7 +196,7 @@
     height: 96px;
   }
 
-  .passwordContainer .forgotPassword {
+  .forgotPassword {
     display: none;
   }
 }
