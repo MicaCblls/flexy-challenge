@@ -33,6 +33,7 @@
 
 .titleContainer h1 {
   font-size: 32px;
+  margin-bottom: 8px;
 }
 .subtitle {
   font-size: 16px;
@@ -43,6 +44,9 @@
 .inputFile {
   height: 48px;
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
   margin-bottom: 24px;
 }
 
@@ -51,6 +55,14 @@
   justify-content: center;
   align-items: center;
   gap: 9px;
+}
+
+.inputFile .checkIcon {
+  display: flex;
+  justify-content: flex-end;
+  color: #47bea3;
+  font-size: 16px;
+  width: 100px;
 }
 
 .inputFile img {
@@ -63,12 +75,19 @@
   font-size: 16px;
 }
 
+.inputFileContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .inputContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
-  margin-bottom: 24px;
+  padding-bottom: 24px;
 }
 .inputInvalid {
   display: flex;
@@ -105,7 +124,6 @@
   display: flex;
   width: 100%;
   position: relative;
-  padding-bottom: 10px;
 }
 
 .eyeContainer {
@@ -125,15 +143,24 @@
 
 .forgotPassword {
   color: var(--primary-color);
+  padding: 20px 0 0 0;
+}
+
+.inputInvalid > .forgotPassword {
+  padding-bottom: 24px;
 }
 
 .validation {
-  padding: 10px 0;
-  display: none;
+  padding: 10px 0 20px 0;
+  text-align: center;
+  max-width: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.passwordContainer .validationPassword {
-  display: none;
+.validationPassword {
+  padding-top: 10px;
 }
 
 .btnContainer {
@@ -169,10 +196,6 @@
     height: 96px;
   }
 
-  .passwordContainer .validationPassword {
-    padding-bottom: 10px;
-    display: flex;
-  }
   .passwordContainer .forgotPassword {
     display: none;
   }
