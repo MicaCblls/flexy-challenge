@@ -1,27 +1,49 @@
-# React + TypeScript + Vite
+# Flexy - Challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una implementación frontend de una pantalla de registro. Está diseñado para ser adaptable a múltiples tamaños de pantalla, tanto en dispositivos móviles como de escritorio.
 
-Currently, two official plugins are available:
+## Funcionalidades principales:
+### Validación de inputs.
+### Validaciones de formulario.
+### Diseño adaptable.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologías utilizadas:
+- Vite
+- React
+- Typescript
+- React-Icons
+- React-Toastify
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
+## Instalación y uso local.
+- Instalación de dependencias:
+Antes de que puedas correr el proyecto en tu máquina local, necesitas instalar las dependencias necesarias.
+Puedes hacerlo ejecutando:
+```js
+  npm install
+```
+## Correr el servidor de desarrollo
+Si quieres ver el proyecto en modo desarrollo, ejecuta el siguiente comando:
 
 ```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+  npm run dev
+```
+## Buildear el proyecto
+Para construir la versión de producción de la aplicación, puedes usar el siguiente comando:
+
+```js
+  npm run build
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Previsualizar la versión de producción
+Si deseas previsualizar cómo se verá tu aplicación en producción (usando el contenido de la carpeta dist), puedes ejecutar:
+
+```js
+  npm run preview
+```
+## Herramientas de código:
+Linter: El proyecto utiliza eslint para asegurar la calidad y consistencia del código. Puedes ejecutar el linter usando:
+```js
+  npm run lint
+```
+Si encuentras algún problema o tienes sugerencias, no dudes en abrir un issue o enviar un pull request. ¡Gracias por contribuir!
+
