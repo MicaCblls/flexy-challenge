@@ -1,9 +1,9 @@
-export const validateImage = (input: FileList | null) => {
+export const validateImage = (input: string) => {
   let error = {
     image: "",
   };
 
-  if (!input) {
+  if (!input.length) {
     error.image = "Imagen requerida";
   }
 
