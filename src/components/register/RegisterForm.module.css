@@ -178,7 +178,7 @@
   font-weight: bold;
 }
 
-@media (min-width: 780px) {
+@media (min-width: 1026px) {
   .registerContainer {
     margin-right: 99px;
   }

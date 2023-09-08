@@ -31,7 +31,7 @@
   background-position: 30% 40%;
 }
 
-@media (min-width: 780px) {
+@media (min-width: 1026px) {
   .picture {
     display: flex;
   }

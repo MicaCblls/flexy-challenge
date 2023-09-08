@@ -17,8 +17,8 @@ import { validatePhone } from "../validations/phone.validation";
 import { validateEmail } from "../validations/email.validation";
 import { validatePassword } from "../validations/password.validation";
 import { toBase64 } from "../../utils/FileToBase64";
-import { validateImage } from "../validations/image.validation";
 import { toast } from "react-toastify";
+import { validateImage } from "../validations/image.validation";
 
 const RegisterForm = () => {
   const fileInputRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
@@ -43,24 +43,32 @@ const RegisterForm = () => {
     setShowPassword(!showPassword);
   };
 
-  const validateOnBlur = (e: FocusEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
+  const validateBeforeSubmit = (formState: Form) => {
+    let errorImageObj = validateImage(formState.image);
+    setFormErrorStatus((prev) => ({ ...prev, ...errorImageObj }));
 
-    if (name === "fullName") {
-      let errorNameObj = validateFullName(value);
-      setFormErrorStatus((prev) => ({ ...prev, ...errorNameObj }));
-    }
-    if (name === "phone") {
-      let errorPhoneObj = validatePhone(value);
-      setFormErrorStatus((prev) => ({ ...prev, ...errorPhoneObj }));
-    }
-    if (name === "email") {
-      let errorEmailObj = validateEmail(value);
-      setFormErrorStatus((prev) => ({ ...prev, ...errorEmailObj }));
-    }
-    if (name === "password") {
-      let errorPasswordObj = validatePassword(value);
-      setFormErrorStatus((prev) => ({ ...prev, ...errorPasswordObj }));
+    let errorNameObj = validateFullName(formState.fullName);
+    setFormErrorStatus((prev) => ({ ...prev, ...errorNameObj }));
+
+    let errorPhoneObj = validatePhone(formState.phone);
+    setFormErrorStatus((prev) => ({ ...prev, ...errorPhoneObj }));
+
+    let errorEmailObj = validateEmail(formState.email);
+    setFormErrorStatus((prev) => ({ ...prev, ...errorEmailObj }));
+
+    let errorPasswordObj = validatePassword(formState.password);
+    setFormErrorStatus((prev) => ({ ...prev, ...errorPasswordObj }));
+
+    if (
+      !formErrorStatus.image.length &&
+      !formErrorStatus.fullName.length &&
+      !formErrorStatus.phone.length &&
+      !formErrorStatus.email.length &&
+      !formErrorStatus.password.length
+    ) {
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -112,9 +120,10 @@ const RegisterForm = () => {
     }
   };
 
-  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (formStatus.image.length) {
+    let finalValidation = await validateBeforeSubmit(formStatus);
+    if (finalValidation) {
       toast.success(
         `¡Bienvenid@ ${formStatus.fullName}! Su registro ha sido exitoso.`,
         {
@@ -138,8 +147,6 @@ const RegisterForm = () => {
         email: "",
         password: "",
       });
-    } else {
-      setFormErrorStatus((prev) => ({ ...prev, image: "Imagen requerida." }));
     }
   };
 
@@ -209,7 +216,6 @@ const RegisterForm = () => {
               placeholder="Nombre y Apellido"
               value={formStatus.fullName}
               onChange={handleInputChange}
-              onBlur={validateOnBlur}
             />
             {formErrorStatus.fullName.length > 0 && (
               <small className={style.validation}>
@@ -235,7 +241,6 @@ const RegisterForm = () => {
               placeholder="+54 01 0200 000"
               value={formStatus.phone}
               onChange={handleInputChange}
-              onBlur={validateOnBlur}
             />
             {formErrorStatus?.phone?.length > 0 && (
               <small className={style.validation}>
@@ -261,7 +266,6 @@ const RegisterForm = () => {
               autoComplete="off"
               value={formStatus.email}
               onChange={handleInputChange}
-              onBlur={validateOnBlur}
             />
 
             {formErrorStatus?.email?.length > 0 && (
@@ -289,7 +293,6 @@ const RegisterForm = () => {
                 placeholder="Ingresá tu contraseña"
                 value={formStatus.password}
                 onChange={handleInputChange}
-                onBlur={validateOnBlur}
               />
               <span
                 className={style.eyeContainer}
