@@ -17,6 +17,8 @@
 
 .button:disabled {
   background-color: var(--disabled-color);
+  background: rgb(237, 233, 254);
+
   cursor: default;
 }
 

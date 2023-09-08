@@ -1,11 +1,27 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useRef,
+  MutableRefObject,
+  FocusEvent,
+} from "react";
 import style from "./RegisterForm.module.css";
 import Button from "./button/Button";
 import { AiOutlineEye } from "react-icons/ai";
 import { TbEyeClosed } from "react-icons/tb";
+import { BsFillCheckCircleFill } from "react-icons/bs";
 import { Form } from "../interface/Form.interface";
+import { validateFullName } from "../validations/fullName.validation";
+import { validatePhone } from "../validations/phone.validation";
+import { validateEmail } from "../validations/email.validation";
+import { validatePassword } from "../validations/password.validation";
+import { toBase64 } from "../../utils/FileToBase64";
+import { validateImage } from "../validations/image.validation";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
+  const fileInputRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
   const [formStatus, setFormStatus] = useState<Form>({
     image: "",
     fullName: "",
@@ -21,22 +37,124 @@ const RegisterForm = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [image, setImage] = useState("");
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+  const validateOnBlur = (e: FocusEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
 
-    setFormStatus((prev) => ({ ...prev, [name]: value }));
+    if (name === "fullName") {
+      let errorNameObj = validateFullName(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorNameObj }));
+    }
+    if (name === "phone") {
+      let errorPhoneObj = validatePhone(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorPhoneObj }));
+    }
+    if (name === "email") {
+      let errorEmailObj = validateEmail(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorEmailObj }));
+    }
+    if (name === "password") {
+      let errorPasswordObj = validatePassword(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorPasswordObj }));
+    }
   };
-  console.log(formStatus);
+
+  const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, files } = event.target;
+
+    if (name === "image") {
+      if (files?.length) {
+        let eventualState = "";
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          if (typeof reader.result === "string") {
+            setImage(reader.result);
+          }
+        };
+        try {
+          const res = await toBase64(files[0]);
+
+          eventualState = res;
+          setFormStatus((prev) => ({ ...prev, image: eventualState }));
+        } catch (e) {
+          console.log(e);
+        }
+        reader.readAsDataURL(files[0]);
+      }
+    }
+
+    if (name === "fullName") {
+      setFormStatus((prev) => ({ ...prev, fullName: value }));
+      let errorNameObj = validateFullName(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorNameObj }));
+    }
+    if (name === "phone") {
+      setFormStatus((prev) => ({ ...prev, phone: value }));
+      let errorPhoneObj = validatePhone(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorPhoneObj }));
+    }
+    if (name === "email") {
+      setFormStatus((prev) => ({ ...prev, email: value }));
+      let errorEmailObj = validateEmail(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorEmailObj }));
+    }
+    if (name === "password") {
+      setFormStatus((prev) => ({ ...prev, password: value }));
+      let errorPasswordObj = validatePassword(value);
+      setFormErrorStatus((prev) => ({ ...prev, ...errorPasswordObj }));
+    }
+  };
 
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event);
+    if (formStatus.image.length) {
+      toast.success(
+        `¡Bienvenid@ ${formStatus.fullName}! Su registro ha sido exitoso.`,
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setFormStatus({
+        image: "",
+        fullName: "",
+        phone: "",
+        email: "",
+        password: "",
+      });
+      setFormErrorStatus({
+        image: "",
+        fullName: "",
+        phone: "",
+        email: "",
+        password: "",
+      });
+    } else {
+      setFormErrorStatus((prev) => ({ ...prev, image: "Imagen requerida." }));
+    }
   };
+
+  const btnDisabled =
+    formErrorStatus.image.length ||
+    formErrorStatus.fullName.length ||
+    formErrorStatus.phone.length ||
+    formErrorStatus.email.length ||
+    formErrorStatus.password.length ||
+    !formStatus.email.length ||
+    !formStatus.fullName.length ||
+    !formStatus.email.length ||
+    !formStatus.password
+      ? true
+      : false;
 
   return (
     <div className={style.registerContainer}>
@@ -49,20 +167,38 @@ const RegisterForm = () => {
       <form className={style.form} onSubmit={handleFormSubmit}>
         <div className={style.formContainer}>
           <div className={style.inputFile}>
-            <input
-              type="file"
-              id="user-avatar"
-              name="image"
-              style={{ display: "none" }}
-              value={formStatus.image}
-              onChange={handleInputChange}
-            />
-            <label htmlFor="user-avatar">
-              <img src="/icono.svg" alt="intup file icon" />{" "}
-              <span>Subí tu foto de perfil</span>
-            </label>
+            <div className={style.inputFileContainer}>
+              <input
+                type="file"
+                id="user-avatar"
+                name="image"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="user-avatar">
+                <img src="/icono.svg" alt="intup file icon" />{" "}
+                <span>Subí tu foto de perfil</span>
+                {formStatus.image.length > 0 && (
+                  <span className={style.checkIcon}>
+                    <BsFillCheckCircleFill />
+                  </span>
+                )}
+              </label>
+            </div>
+            {formErrorStatus.image.length > 0 && (
+              <small className={style.validation}>
+                {formErrorStatus.image}
+              </small>
+            )}
           </div>
-          <div className={style.inputContainer}>
+          <div
+            className={
+              formErrorStatus?.fullName?.length
+                ? style.inputInvalid
+                : style.inputContainer
+            }
+          >
             <label htmlFor="fullName">Nombre y Apellido</label>
             <input
               type="text"
@@ -73,13 +209,22 @@ const RegisterForm = () => {
               placeholder="Nombre y Apellido"
               value={formStatus.fullName}
               onChange={handleInputChange}
+              onBlur={validateOnBlur}
             />
-            <small className={style.validation}>
-              Debe tener al menos 8 caracteres.
-            </small>
+            {formErrorStatus.fullName.length > 0 && (
+              <small className={style.validation}>
+                {formErrorStatus.fullName}
+              </small>
+            )}
           </div>
 
-          <div className={style.inputContainer}>
+          <div
+            className={
+              formErrorStatus?.phone?.length
+                ? style.inputInvalid
+                : style.inputContainer
+            }
+          >
             <label htmlFor="phone">Teléfono</label>
             <input
               type="phone"
@@ -90,13 +235,22 @@ const RegisterForm = () => {
               placeholder="+54 01 0200 000"
               value={formStatus.phone}
               onChange={handleInputChange}
+              onBlur={validateOnBlur}
             />
-            <small className={style.validation}>
-              Debe tener al menos 8 caracteres.
-            </small>
+            {formErrorStatus?.phone?.length > 0 && (
+              <small className={style.validation}>
+                {formErrorStatus.phone}
+              </small>
+            )}
           </div>
 
-          <div className={style.inputContainer}>
+          <div
+            className={
+              formErrorStatus?.email?.length
+                ? style.inputInvalid
+                : style.inputContainer
+            }
+          >
             <label htmlFor="email">Email</label>
             <input
               type="email"
@@ -107,14 +261,23 @@ const RegisterForm = () => {
               autoComplete="off"
               value={formStatus.email}
               onChange={handleInputChange}
+              onBlur={validateOnBlur}
             />
 
-            <small className={style.validation}>
-              Debe tener al menos 8 caracteres.
-            </small>
+            {formErrorStatus?.email?.length > 0 && (
+              <small className={style.validation}>
+                {formErrorStatus.email}
+              </small>
+            )}
           </div>
 
-          <div className={style.passwordContainer}>
+          <div
+            className={
+              formErrorStatus?.password?.length
+                ? style.inputInvalid
+                : style.inputContainer
+            }
+          >
             <label htmlFor="password">Contraseña</label>
             <div className={style.inputPassword}>
               <input
@@ -126,6 +289,7 @@ const RegisterForm = () => {
                 placeholder="Ingresá tu contraseña"
                 value={formStatus.password}
                 onChange={handleInputChange}
+                onBlur={validateOnBlur}
               />
               <span
                 className={style.eyeContainer}
@@ -134,16 +298,18 @@ const RegisterForm = () => {
                 {showPassword ? <AiOutlineEye /> : <TbEyeClosed />}
               </span>
             </div>
-            <small className={style.validationPassword}>
-              Debe tener al menos 8 caracteres.
-            </small>
+            {formErrorStatus?.password?.length > 0 && (
+              <small className={style.validationPassword}>
+                {formErrorStatus.password}
+              </small>
+            )}
             <small className={style.forgotPassword}>
               ¿Olvidaste tu contraseña?
             </small>
           </div>
         </div>
         <div className={style.btnContainer}>
-          <Button btnDisabled={false} />
+          <Button btnDisabled={btnDisabled} />
           <small>
             ¿Ya tenés una cuenta? <strong>Iniciá sesión</strong>{" "}
           </small>
